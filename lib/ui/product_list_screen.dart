@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../repository/product_repository.dart';
-import '../cubit/product_state.dart';
+
 import '../cubit/product_cubit.dart';
+import '../cubit/product_state.dart';
+import '../repository/product_repository.dart';
 
 class ProductListScreen extends StatelessWidget {
   final ProductRepository repository;
@@ -15,7 +16,7 @@ class ProductListScreen extends StatelessWidget {
       if (state.isFetchingNetwork) return 'Fetching from network...';
       if (state.isUpToDate) return 'Up-to-date';
     }
-    if (state is ProductError) return 'Error';
+    if (state is ProductError) return 'Error in fetching products';
     return '';
   }
 
@@ -26,9 +27,9 @@ class ProductListScreen extends StatelessWidget {
       child: BlocConsumer<ProductCubit, ProductState>(
         listener: (context, state) {
           if (state is ProductError && state.message.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -47,12 +48,34 @@ class ProductListScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(_statusText(state)),
-                      IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () {
-                          context.read<ProductCubit>().fetchProducts(forceRefresh: true);
-                        },
+                      Expanded(
+                        child: Text(
+                          _statusText(state),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () {
+                              context.read<ProductCubit>().fetchProducts(
+                                forceRefresh: true,
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              context.read<ProductCubit>().fetchProducts(
+                                forceError: true,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -61,21 +84,23 @@ class ProductListScreen extends StatelessWidget {
                   child: (state is ProductLoading)
                       ? const Center(child: CircularProgressIndicator())
                       : products.isEmpty
-                          ? const Center(child: Text('No products'))
-                          : ListView.builder(
-                              itemCount: products.length,
-                              itemBuilder: (context, index) {
-                                final product = products[index];
-                                return ListTile(
-                                  title: Text(product.name),
-                                  subtitle: Text('₹${product.price.toStringAsFixed(2)}'),
-                                  trailing: Text(
-                                    'Updated: ${product.updatedAt.hour}:${product.updatedAt.minute.toString().padLeft(2, '0')}',
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                );
-                              },
-                            ),
+                      ? const Center(child: Text('No products'))
+                      : ListView.builder(
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return ListTile(
+                              title: Text(product.name),
+                              subtitle: Text(
+                                '₹${product.price.toStringAsFixed(2)}',
+                              ),
+                              trailing: Text(
+                                'Updated: ${product.updatedAt.hour}:${product.updatedAt.minute.toString().padLeft(2, '0')}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            );
+                          },
+                        ),
                 ),
               ],
             ),

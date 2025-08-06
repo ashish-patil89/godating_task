@@ -18,7 +18,10 @@ class ProductCubit extends Cubit<ProductState> {
     fetchProducts();
   }
 
-  void fetchProducts({bool forceRefresh = false}) async {
+  void fetchProducts({
+    bool forceRefresh = false,
+    bool forceError = false,
+  }) async {
     // Show loading from cache state immediately
     final cacheProducts = repository.cache.products;
     emit(
@@ -30,10 +33,18 @@ class ProductCubit extends Cubit<ProductState> {
       ),
     );
     try {
+      if (forceError) {
+        throw Exception('Error occurred while fetching products');
+      }
       await repository.fetchProducts(forceRefresh: forceRefresh);
       _setupStaleTimer();
     } catch (e) {
-      emit(ProductError(e.toString()));
+      emit(
+        ProductError(
+          e.toString().replaceAll('Exception:', ''),
+          products: cacheProducts,
+        ),
+      );
     }
   }
 
