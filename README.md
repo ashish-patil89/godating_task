@@ -1,14 +1,10 @@
-# godating_task
-
-A demonstration app of given task for godating.
+# A demonstration app of given task from go-dating.
 
 ## Architecture: Data Repository Layer
 
 This app uses the **Repository Pattern** to abstract data access and business logic from the UI. The repository layer is responsible for:
 
 - Coordinating between multiple data sources (local cache and remote API)
-- Exposing a unified interface for fetching and observing product data
-- Managing cache freshness and staleness
 
 The repository implementation (`ProductRepository`) checks the local in-memory cache first for fast access, then fetches from a simulated remote API if the cache is empty or stale. This separation of concerns aligns with Clean Architecture principles, making the codebase modular and testable.
 
