@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../repository/product_repository.dart';
+
 import '../repository/models/product_repository_state.dart';
-import '../model/product.dart';
+import '../repository/product_repository.dart';
 import 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
@@ -20,12 +21,14 @@ class ProductCubit extends Cubit<ProductState> {
   void fetchProducts({bool forceRefresh = false}) async {
     // Show loading from cache state immediately
     final cacheProducts = repository.cache.products;
-    emit(ProductLoaded(
-      products: cacheProducts,
-      isLoadingCache: true,
-      isFetchingNetwork: false,
-      isUpToDate: false,
-    ));
+    emit(
+      ProductLoaded(
+        products: cacheProducts,
+        isLoadingCache: true,
+        isFetchingNetwork: false,
+        isUpToDate: false,
+      ),
+    );
     try {
       await repository.fetchProducts(forceRefresh: forceRefresh);
       _setupStaleTimer();
@@ -56,12 +59,14 @@ class ProductCubit extends Cubit<ProductState> {
     if (repoState.error != null && repoState.error!.isNotEmpty) {
       emit(ProductError(repoState.error!, products: repoState.products));
     } else {
-      emit(ProductLoaded(
-        products: repoState.products,
-        isLoadingCache: repoState.isLoadingCache,
-        isFetchingNetwork: repoState.isFetchingNetwork,
-        isUpToDate: repoState.isUpToDate,
-      ));
+      emit(
+        ProductLoaded(
+          products: repoState.products,
+          isLoadingCache: repoState.isLoadingCache,
+          isFetchingNetwork: repoState.isFetchingNetwork,
+          isUpToDate: repoState.isUpToDate,
+        ),
+      );
     }
   }
 

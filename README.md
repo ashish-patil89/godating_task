@@ -27,6 +27,6 @@ The app uses **Cubit** from the `flutter_bloc` package for state management. Cub
 
 ---
 
-Notes:
+## Notes
 
 I have added extra delay to see changes in UI in line number 88 of (`ProductRepository`) for loading data from cache

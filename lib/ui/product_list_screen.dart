@@ -68,7 +68,7 @@ class ProductListScreen extends StatelessWidget {
                                 final product = products[index];
                                 return ListTile(
                                   title: Text(product.name),
-                                  subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                                  subtitle: Text('₹${product.price.toStringAsFixed(2)}'),
                                   trailing: Text(
                                     'Updated: ${product.updatedAt.hour}:${product.updatedAt.minute.toString().padLeft(2, '0')}',
                                     style: const TextStyle(fontSize: 12),

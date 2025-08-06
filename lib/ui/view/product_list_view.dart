@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubit/product_cubit.dart';
-import '../../cubit/productState.dart';
+import '../../cubit/product_state.dart';
 import '../../model/product.dart';
 
 class ProductListView extends StatelessWidget {
