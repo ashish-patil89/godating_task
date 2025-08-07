@@ -31,3 +31,5 @@ The app uses **Cubit** from the `flutter_bloc` package for state management. Cub
 
 - I have added extra delay to see changes in UI in line number 88 of (`ProductRepository`) for loading data from cache
 - Added an error IconButton in UI to show force error message and show local cache data.(`ProductCubit`) is handling state changes for this already.
+
+Here is the video demo of the app: [https://drive.google.com/file/d/1izjT8zr7e0AoZ1CWo9vqBC2-Rktko-Fj/view?usp=sharing](https://drive.google.com/file/d/1izjT8zr7e0AoZ1CWo9vqBC2-Rktko-Fj/view?usp=sharing)
