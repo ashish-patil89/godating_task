@@ -55,7 +55,7 @@ class ProductCubit extends Cubit<ProductState> {
     if (lastUpdated == null) return;
     final now = DateTime.now();
     final elapsed = now.difference(lastUpdated);
-    final remaining = Duration(minutes: 2) - elapsed;
+    final remaining = Duration(minutes: 5) - elapsed;
     if (remaining.isNegative) {
       // Already stale, fetch immediately
       fetchProducts(forceRefresh: true);
